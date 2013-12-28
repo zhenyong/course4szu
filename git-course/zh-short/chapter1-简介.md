@@ -136,6 +136,9 @@ git config 的工具，专门用来配置或读取相应的工作环境变量。
 	$ git config --global user.name "John Doe"
 	$ git config --global user.email johndoe@example.com
 
+### 添加密钥 ###	
+	ssh-keygen -t rsa -C "your_email@example.com"
+
 ### 文本编辑器 ###
 
 接下来要设置的是默认使用的文本编辑器。Git 需要你输入一些额外消息的时候，会自动调用一个外部文本编辑器给你用。默认会使用操作系统指定的默认编辑器，一般可能会是 Vi 或者 Vim。如果你有其他偏好，比如 Emacs 的话，可以重新设置：
