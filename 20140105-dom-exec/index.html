@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>
+			注册界面
+		</title>
+		<meta charset="utf-8">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="This is my page">
+		
+		<link rel="stylesheet" type="text/css" href="index.css">
+		
+		<script type="text/javascript" src="./lib/jquery-1.10.2.js"></script>
+
+		<script type="text/javascript" src="dom.js"></script>
+
+
+		<script type="text/javascript">
+						function validata() {
+							return true;
+					var username = document.getElementById("username");
+					var password = document.getElementById("password");
+					var repassword = document.getElementById("repassword");
+					var username = document.getElementById("username");
+					var address = document.getElementById("address");
+					if (username.value == "") {
+						alert("账号不能为空");
+						return false;
+					}
+					if (password.value == "" || repassword.value == "") {
+						alert("密码不能为空");
+						return false;
+					}
+					if (password.value != repassword.value) {
+						alert("两次输入的密码不相同");
+						return false;
+					}
+					if (username.value == "") {
+						alert("用户名不能为空");
+						return false;
+					}
+					if (address.value == "") {
+						alert("地址不能为空");
+						return false;
+					}
+					return true;
+				}
+		</script>
+	</head>
+	<body>
+		<div class="align-left">
+			<form id="register-form" action="user/register" onsubmit="return validata()" method="GET">
+				<div>
+					<label>账号</label>
+					<input type="text" value="username-1" name="username" id="username">
+				</div>
+				<div>
+					<label>密码</label>
+					<input type="password" value="password-1" name="password" id="password">
+				</div>
+				<div>
+					<label>确认密码:</label>
+					<input type="password" value="repassword-1" name="repassword" id="repassword">
+				</div>
+				<div>
+					<label>姓名：</label>
+					<input type="text" value="username-1" name="username" id="username">
+				</div>
+				<div>
+					<label>性别：</label>
+						男 <input type="radio" value="male" value="gender-1" name="gender" checked="checked">
+						女 <input type="radio" value="female" value="gender-1" name="gender">
+							
+				</div>
+				<div>
+				
+				<label>生日：</label>
+				年<select value="year-1" name="year">
+				<options>
+					<option value="1989">一九八九</option>
+					<option value="1990">一九九零</option>
+					<option value="1991">一九九一</option>
+
+				</options>
+				</select>
+				月<select value="month-1" name="month">
+				<options>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+				</options>
+				</select>
+				日<select value="day-1" name="day">
+					<options>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+				</options>
+				</select>
+				
+				</div>
+				
+				<label>地址：</label>
+				<input type="text" value="address-1" name="address" id="address">
+				<div>
+					<input id="submit-btn" type="submit" value="提交">
+				</div>
+			</form>
+		</div>
+	</body>
+
+</html>

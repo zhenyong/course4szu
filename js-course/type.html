@@ -1,0 +1,74 @@
+< html > < head > < title > < /title>
+	<script type="text/javascript
+">
+
+	var func = function (undefine) {
+		
+
+		var toString = Object.prototype.toString;
+
+		var map = {
+			i : 111,
+			str : 'hello',
+			boolFalse : false,
+			undefinedVar : undefine,
+			nullVar : null,
+			plainObj : {},
+			arr: []
+		};
+
+		for (var prop in map) {
+			// console.log(prop + ' : ' + toString.call(map[prop]));
+		}
+
+
+
+
+
+
+
+
+
+
+	};
+
+	func();
+
+
+
+
+	//////////////////////////
+	//
+	//
+	//
+	var isPerson  = true;
+	var obj = {};
+	var i = 1; 
+	var str = '1';
+	var strFalse = 'false';
+
+	var boolFalse = false;
+
+	// console.log(isPerson == obj);
+
+	// console.log(i == str);
+
+	// console.log(strFalse == boolFalse);
+
+	var arr = null;
+
+	for(var i = 0, len = arr ? arr.length : 0; i < len; i++) {
+
+		console.log(arr[i]);
+
+	}
+
+
+
+	</script>
+
+</head>
+<body>
+
+</body>
+</html>

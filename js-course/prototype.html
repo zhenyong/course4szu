@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>
+		</title>
+		<script type="text/javascript">
+		function Person(name, age) {
+			this.name = name;
+			this.age = age;
+		}
+
+		Person.prototype = {
+
+			sayHello: function() {
+				console.log('$%$^%^*&$%^$%&');
+			}
+
+		};
+
+
+		function Chinese(name, age, isDigouyou) {
+
+			Person.apply(this, arguments);
+
+			this.isDigouyou = isDigouyou;
+		}
+
+
+		Chinese.protoype = new Person();
+
+		Chinese.protoype.hasEat = function() {
+			return true;
+		};
+
+		Chinese.protoype.sayHello = function() {
+			console.info(this.name + '你好');
+		};
+
+		function GuangdongPerson(isGuangdong) {
+
+			Chinese.apply(this, arguments);
+
+			if (isGuangdong === false) {
+				this.isGuangdong = false;
+			}
+			this.isGuangdong = true;
+		}
+
+		GuangdongPerson.prototype = new Chinese();
+
+		GuangdongPerson.prototype.aiya = function() {
+			console.log('fsdfds');
+		}
+
+		var perter = new GuangdongPerson(falseg);
+
+
+
+		// var obj = {
+		// 	name: 'xiaohui'
+		// };
+
+		// hu.sayHello();
+
+		// hu.sayHello.call(obj, ' hello', 'world');
+		// hu.sayHello.apply(obj, [' hello', 'world']);
+
+
+
+
+
+
+
+
+
+
+
+		
+		</script>
+	</head>
+	<body>
+	</body>
+
+</html>
