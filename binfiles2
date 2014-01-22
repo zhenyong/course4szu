@@ -1,0 +1,404 @@
+//JSON.stringify({'1':{name:'peter'}})
+
+
+//the server side start
+//in disk
+var db = {'1':{id:'1',name:'name1', phone:'phone1', age: 11},
+			'2':{id:'2',name:'name2', phone:'phone2', age: 22},
+			'3':{id:'3',name:'name3', phone:'phone3', age: 33}};
+
+//persist layer
+var dao = {
+	list: function (callback) {
+		// var ret = [];
+		// $.each(db, function (index, value) {
+		// 	ret.push(value);
+		// });
+		// return ret;
+		$.ajax({
+			url: 'data/list.json',
+			success: function (data) {
+				callback(data);
+			},
+			complete: function  () {
+				alert(1);
+			}
+		});
+
+
+	},
+
+	findById: function (id) {
+		return db[id];
+	},
+
+	update: function (data, callback) {
+		db[data.id] = data;
+		log('server contact dao update success', data);
+		var lastData = data;
+		setTimeout(function () {
+			callback(true, lastData);//true meas success
+		}, 800);
+	},
+
+	// insert: function(data,callback){
+	// 	db[data.id] = data;
+	// 	log('server contact dao insert success', data);
+	// 	var lastData = data;
+	// 	setTimeout(function () {
+	// 		callback(true, lastData);//true meas success
+	// 	}, 1800);
+
+	// }
+
+	// daoInsert: function(data, callback)
+	// {
+	// 	db[data.]
+	// }
+}
+//the server side end
+
+var indicate = {
+	show: function (msg) {
+		var el = $('#indicator');
+		el.text(msg).show();
+		return el;
+	},
+	hide: function () {
+		$('#indicator').hide();
+	}
+}
+
+
+function generateTpl () {
+	return Array.prototype.slice.call(arguments, 0).join('');
+}
+
+function log () {
+	console.log.apply(console, arguments);
+}
+/*
+主函数
+直接调用init方法
+*/
+function Application() {
+	this.init();
+}
+
+Application.prototype = {
+	init: function () {
+		log('>>>app init');
+		var me = this;
+		//初始化model。
+		this.contactsModel = new ContactsModel();
+		//初始化view。
+		this.view = new ContactsView();
+		//初始化controler
+		this.controller = new ContactsController(this.view, this.contactsModel);
+
+			$('#insert-btn').on('click',function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				var str= 'helloworld';
+				me.view.fire('insert.click',[str]);
+			});
+		
+	},
+
+	startup: function () {
+		this.controller.showContacts();
+	}
+};
+
+//@controller
+//controller有两个实例变量view和mode，分别连接view模块和model模块
+//还应绑定'insert.click',insert-submit事件（待实现）
+function ContactsController (view, mode) {
+	//
+	this.view = view;
+	this.model = mode;
+
+	// this.view.bind('edit', bind(this.onViewEdit, this));
+	this.view.bind('edit.click', this.onViewEdit, this);
+	this.view.bind('edit.submit', this.onViewSubmit, this);
+
+	//针对insert-click,和insert-submit事件进行绑定
+	this.view.bind('insert.click', this.onViewInsertClick, this);
+	this.view.bind('insert.submit', this.onViewInsertSubmit, this);
+
+}
+
+//当事件被触发时，相应的controller方法被调用
+ContactsController.prototype = {
+	onViewInsertClick : function(msg){
+		var me =this;
+		log('>>> controller onViewInsertClick');
+		alert(msg);
+		this.view.showInsertForm();
+	},
+	onViewInsertSubmit :  function (data, callback) {
+		var me =this;
+		log('>>> controller on view Submit');
+			
+		//udpate
+		
+		this.model.insert(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+
+},
+
+	onViewEdit : function (id) {
+		log('>>> controller on view edit');
+		
+		var contactData = this.model.fetch(id)
+		
+		this.view.showEditForm(contactData)
+
+	},	
+	onViewSubmit : function (data, callback) {
+		var me =this;
+		log('>>> controller on view Submit');
+			
+		//udpate
+		
+		this.model.update(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+
+
+
+		log('<<< controller');
+	},
+
+	showContacts: function () {
+		var me = this;
+		//get contacts data
+		var dataList = this.model.fetch('all', function (dataList) {
+			log('>>>controller showContacts');
+			me.view.listContacts(dataList);
+		});
+
+
+		// var dataList = this.model.fetch();
+
+		// log('>>>controller showContacts');
+		// this.view.listContacts(dataList);
+	}
+}
+function formatContactInsertFormTpl(){
+	return generateTpl(
+		'<form>',
+			'<div>',
+				'<label>id: </label>',
+				'<input type="text" value=" 4" name="id" placeholder="请输入id">',
+			'</div>',
+			'<div>',
+				'<label>name: </label>',
+				'<input type="text" value="name4" name="name" placeholder="请输入name">',
+			'</div>',
+			'<div>',
+				'<label>phone: </label>',
+				'<input type="text" value="phone4" name="phone" placeholder="请输入电话">',
+			'</div>',
+			'<div>',
+				'<label>age: </label>',
+				'<input type="text" value="age5" name="age" placeholder="请输入age">',
+			'</div>',
+			'<input type="submit" value="ok">',
+		'</form>'
+		);
+
+}
+function formatContactEditFormTpl (data) {
+	return generateTpl(
+		'<form>',
+			'<div>',
+				'<label>phone: </label>',
+				'<input type="text" value="' + data.phone + '" name="phone" placeholder="请输入电话">',
+			'</div>',
+			//TODO ...
+			'<input type="submit" value="ok">',
+		'</form>');
+}
+
+function insertFormatContactItemTpl (data) {
+	return generateTpl('<li>',
+				'<input type="hidden" pid="' + data.id + '">',
+				'<span>' + data.name + '</span>&nbsp;',
+				'<span>' + data.phone + '</span>&nbsp',
+				'<span>' + data.age + '</span>&nbsp;',
+				'<input type="button" value="edit">',
+			'</li>');
+}
+function editFormatContactItemTpl (data) {
+	return generateTpl(
+				'<input type="hidden" pid="' + data.id + '">',
+				'<span>' + data.name + '</span>&nbsp;',
+				'<span>' + data.phone + '</span>&nbsp',
+				'<span>' + data.age + '</span>&nbsp;',
+				'<input type="button" value="edit">'
+			);
+}
+//view模块继承观察着类，拥有观察着类的fire(),bind()方法，并拥有自己的showeditform,listcontacts(),updatesuccess(),updatefailed方法。
+//还应拥有showInsertForm方法，（待实现）
+ContactsView = Class.extend(Observable, {
+
+	showInsertForm : function(){
+		var data = {};
+		var me = this;
+		var tpl = formatContactInsertFormTpl();
+
+		var $form = $(tpl).css({
+			position: 'absolute',
+			border: '1px solid'
+		}).appendTo(document.body);
+
+		$form.css({
+			left: ($(window).width() - $form.width()) / 2
+		});
+		$form.on('submit', function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			data.id = $(this).find('input[name="id"]').val();
+			data.name = $(this).find('input[name="name"]').val();
+			data.phone = $(this).find('input[name="phone"]').val();
+			data.age = $(this).find('input[name="age"]').val();
+
+			log(data);
+
+			me.fire('insert.submit', [data, function (success, lastData) {
+
+				success ?  me.onUpdateSuccess(data) : me.onUpdateFail(data);
+				var $item = $(insertFormatContactItemTpl(lastData));
+				$('ul').append($item);
+
+				$item.click(function () {
+				log('view fire edit event');
+				me.fire('edit.click', [lastData.id]);
+			});
+
+			}]);
+
+			indicate.show('saving');
+
+			$(this).hide();
+
+
+
+		});
+
+	},
+
+	showEditForm: function (data) {
+		//显示修改框
+		var me = this;
+		var tpl = formatContactEditFormTpl(data);
+
+		var $form = $(tpl).css({
+			position: 'absolute',
+			border: '1px solid'
+		}).appendTo(document.body);
+
+		$form.css({
+			left: ($(window).width() - $form.width()) / 2
+		});
+		//end
+		//点击OK按钮触发动作
+		$form.on('submit', function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			//my code
+			// me.fire('edit.submit', util.getFormVules($form))
+			//hack
+			data.phone = $(this).find('input[name="phone"]').val();
+
+			console.info('view fire edit.submit event with data ', data);
+			//触发事件，传入事件名和处理方法和相应数据
+			me.fire('edit.submit', [data, function (success, lastData) {
+
+				success ?  me.onUpdateSuccess(data) : me.onUpdateFail(data);
+
+				var id = lastData.id;
+				var li = $('input[pid="' + id + '"]').closest('li');
+				li.empty().append(editFormatContactItemTpl(lastData));
+
+			}]);
+
+			indicate.show('saving');
+
+			$(this).hide();
+		});
+
+	},
+	listContacts: function (dataList) {
+
+		log('>>>view list ', dataList);
+
+		var me = this;
+		var ul = $('#contacts'), $item;
+
+		$.each(dataList, function (index, value) {
+			console.info(index);
+			var tpl = [
+			'<li>',
+				'<input type="hidden" pid="' + value.id + '">',
+				'<span>' + value.name + '</span>&nbsp;',
+				'<span>' + value.phone + '</span>&nbsp',
+				'<span>' + value.age + '</span>&nbsp;',
+				'<input type="button" value="edit">',
+			'</li>'].join('');
+
+			$item = $(tpl);
+			$item.appendTo(ul);
+
+			$item.click(function () {
+				log('view fire edit event');
+				me.fire('edit.click', [value.id]);
+			});
+
+		});
+	},
+
+	onUpdateFail: function () {
+
+	},
+
+	onUpdateSuccess: function (data) {
+
+		indicate.show('save ' + data.id + ' success').fadeOut();
+
+	}
+	
+});
+
+//@Model
+//
+
+function ContactsModel () {
+
+}
+//model方法有获取数据的方法fetch（）
+//有更新数据的方法update（）
+ContactsModel.prototype = {
+	fetch: function (id, callback) {
+		log('>>> model fetch');
+
+		return (!id || id==='all') ? dao.list(callback) : dao.findById(id);
+	},
+
+	update: function (data, callback) {
+		log('>>> model update with ', data);
+
+		dao.update(data, callback);
+
+	},
+	insert: function(data, callback){
+		dao.update(data, callback);
+	}
+};
+
+
+		
