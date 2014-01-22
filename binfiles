@@ -1,0 +1,271 @@
+//JSON.stringify({'1':{name:'peter'}})
+
+
+//the server side start
+//in disk
+var db = {'1':{id:'1',name:'name1', phone:'phone1', age: 11},
+			'2':{id:'2',name:'name2', phone:'phone2', age: 22},
+			'3':{id:'3',name:'name3', phone:'phone3', age: 33}};
+
+//persist layer
+var dao = {
+	list: function (callback) {
+		// var ret = [];
+		// $.each(db, function (index, value) {
+		// 	ret.push(value);
+		// });
+		// return ret;
+		$.ajax({
+			url: 'data/list.json',
+			success: function (data) {
+				callback(data);
+			},
+			complete: function  () {
+				alert(1);
+			}
+		});
+
+
+	},
+
+	findById: function (id) {
+		return db[id];
+	},
+
+	update: function (data, callback) {
+		db[data.id] = data;
+		log('server contact dao update success', data);
+var lastData = data;
+		setTimeout(function () {
+			callback(true, lastData);//true meas success
+		}, 800);
+
+	}
+}
+//the server side end
+
+var indicate = {
+	show: function (msg) {
+		var el = $('#indicator');
+		el.text(msg).show();
+		return el;
+	},
+	hide: function () {
+		$('#indicator').hide();
+	}
+}
+
+
+function generateTpl () {
+	return Array.prototype.slice.call(arguments, 0).join('');
+}
+
+function log () {
+	console.log.apply(console, arguments);
+}
+
+function Application() {
+	this.init();
+}
+
+Application.prototype = {
+	init: function () {
+		log('>>>app init');
+		
+		this.contactsModel = new ContactsModel();
+		this.view = new ContactsView();
+
+		this.controller = new ContactsController(this.view, this.contactsModel);
+		
+	},
+
+	startup: function () {
+		this.controller.showContacts();
+	}
+};
+
+//@controller
+
+function ContactsController (view, mode) {
+	//
+	this.view = view;
+	this.model = mode;
+
+	// this.view.bind('edit', bind(this.onViewEdit, this));
+	this.view.bind('edit.click', this.onViewEdit, this);
+	this.view.bind('edit.submit', this.onViewSubmit, this);
+
+}
+
+
+ContactsController.prototype = {
+	onViewEdit : function (id) {
+		log('>>> controller on view edit');
+		
+		var contactData = this.model.fetch(id)
+		
+		this.view.showEditForm(contactData)
+
+	},	
+	onViewSubmit : function (data, callback) {
+		var me =this;
+		log('>>> controller on view Submit');
+			
+		//udpate
+		
+		this.model.update(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+
+
+
+		log('<<< controller');
+	},
+
+	showContacts: function () {
+		var me = this;
+		//get contacts data
+		var dataList = this.model.fetch('all', function (dataList) {
+			log('>>>controller showContacts');
+			me.view.listContacts(dataList);
+		});
+
+
+		// var dataList = this.model.fetch();
+
+		// log('>>>controller showContacts');
+		// this.view.listContacts(dataList);
+	}
+}
+
+function formatContactEditFormTpl (data) {
+	return generateTpl(
+		'<form>',
+			'<div>',
+				'<label>phone: </label>',
+				'<input type="text" value="' + data.phone + '" name="phone" placeholder="请输入电话">',
+			'</div>',
+			//TODO ...
+			'<input type="submit" value="ok">',
+		'</form>');
+}
+
+function formatContactItemTpl (data) {
+	return generateTpl('<li>',
+				'<input type="hidden" pid="' + data.id + '">',
+				'<span>' + data.name + '</span>&nbsp;',
+				'<span>' + data.phone + '</span>',
+				'<input type="button" value="edit">',
+			'</li>');
+}
+
+ContactsView = Class.extend(Observable, {
+
+	showEditForm: function (data) {
+
+		var me = this;
+		var tpl = formatContactEditFormTpl(data);
+
+		var $form = $(tpl).css({
+			position: 'absolute',
+			border: '1px solid'
+		}).appendTo(document.body);
+
+		$form.css({
+			left: ($(window).width() - $form.width()) / 2
+		});
+
+		$form.on('submit', function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			//my code
+			// me.fire('edit.submit', util.getFormVules($form))
+			//hack
+			data.phone = $(this).find('input[name="phone"]').val()
+
+			console.info('view fire edit.submit event with data ', data);
+
+			me.fire('edit.submit', [data, function (success, lastData) {
+
+				success ?  me.onUpdateSuccess(data) : me.onUpdateFail(data);
+
+				var id = lastData.id;
+				var li = $('input[pid="' + id + '"]').closest('li');
+				li.empty().append(formatContactItemTpl(lastData));
+
+			}]);
+
+			indicate.show('saving');
+
+			$(this).hide();
+		});
+
+	},
+
+	onUpdateFail: function () {
+
+	},
+
+	onUpdateSuccess: function (data) {
+
+		indicate.show('save ' + data.id + ' success').fadeOut();
+
+	},
+
+	listContacts: function (dataList) {
+
+		log('>>>view list ', dataList);
+
+		var me = this;
+		var ul = $('#contacts'), $item;
+
+		$.each(dataList, function (index, value) {
+			console.info(index);
+			var tpl = [
+			'<li>',
+				'<input type="hidden" pid="' + value.id + '">',
+				'<span>' + value.name + '</span>&nbsp;',
+				'<span>' + value.phone + '</span>',
+				'<input type="button" value="edit">',
+			'</li>'].join('');
+
+			$item = $(tpl);
+			$item.appendTo(ul);
+
+			$item.click(function () {
+				log('view fire edit event');
+				me.fire('edit.click', [value.id]);
+			});
+
+		});
+
+
+
+
+	}
+});
+
+//@Model
+
+function ContactsModel () {
+
+}
+
+ContactsModel.prototype = {
+	fetch: function (id, callback) {
+		log('>>> model fetch');
+
+		return (!id || id==='all') ? dao.list(callback) : dao.findById(id);
+	},
+
+	update: function (data, callback) {
+		log('>>> model update with ', data);
+
+		dao.update(data, callback);
+
+	}
+};
+
+
+		
