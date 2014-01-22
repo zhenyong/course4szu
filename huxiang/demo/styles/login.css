@@ -1,0 +1,158 @@
+* {
+	font-family: Verdana;
+}
+
+.container{
+	background: transparent url('../images/login_background.png');
+	width:400px;
+	height:587px;
+	margin:0 auto;
+}
+.body{
+	max-width: 400px;
+	height:365px;
+	width: 360px;
+	margin: 0 auto;
+	margin-top: 30px;
+	/*margin: 0 15px 0 15px;*/
+	border: 0;
+	background:#E5E5E5;
+	position: relative;
+}
+
+form {
+	width: 100%;
+}
+
+div.input-wrap{
+	 width: 320px;
+	 margin: 0 auto;
+	 height: 51px;
+	 text-align: left;
+	 margin-bottom: 20px;
+	 padding-left: 54px;
+	 box-sizing: border-box;
+}
+
+.input-wrap>input {
+	padding-left: 10px;
+	font-size: 20px;
+	border: none;
+	width: 266px;
+	height: 100%;
+	wrap-height: 100%;
+	box-sizing: border-box;
+}
+.account-input-wrap {
+	background: transparent url('../images/login_account.jpg') no-repeat;
+}
+
+.password-input-wrap {
+	background: transparent url('../images/login_psw.jpg') no-repeat;
+}
+
+.head{
+    width: 100%;
+    height:158px;
+    text-align: center;
+    color: #797979;
+    font-weight: bold;
+    font-size: 350%;
+}
+.logo{
+	margin:0 0;
+	border: 0;
+	padding: 35px;
+}
+
+.title{
+	padding:25px;
+	margin: 0;
+	color: #000;
+	text-align: center;
+	font-size: 150%;
+}
+.infor{
+	height:125px;
+	text-align: center;
+}
+
+a:link {
+	color: black;
+}
+#remember-psw {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	vertical-align: middle;
+}
+.pull-left {
+	float: left;
+}
+#remember-psw:focus {
+	border:none;
+}
+#remember-psw:checked:after {
+	color: #85ada7;
+	text-shadow: 0 1px 0 #669991;
+	bottom: 1px;
+	position: relative;
+}
+#remember-psw {
+	text-decoration: none;
+	outline: none;
+}
+#remember-psw:after {
+	content: '✔';
+	font-size: 18px;
+	color: #d9d9d9;
+	background: white;
+	text-shadow: 0 -1px 0 #bfbfbf;
+}
+
+.form-bottom{
+	padding: 0 50px;
+}
+  .pull-right {
+  	float: right;
+  }
+  .btn{
+  	width: 124px;
+	height: 24px;
+	text-align: center;
+	color: #FFF;
+	padding: 10px;
+	font-size: 120%;
+  }
+.login-btn{
+	background: #007aff;
+	left: 15px;
+	top:0;
+	position: absolute;
+}
+.login-btn:active {
+	background: #0066e5;
+}
+.register-btn{
+	background: #67b552;
+	right: 15px;
+	top: 0;
+	position: absolute;
+}	
+.register-btn:active{
+	background: #67ac32;
+}
+.fg-psw a{
+	vertical-align: middle;
+}
+.form-bottom{
+	height: 30px;
+}
+.btns{
+	margin-top: 20px;
+	position: relative;
+	width: 100%;
+	height: 20px;
+}

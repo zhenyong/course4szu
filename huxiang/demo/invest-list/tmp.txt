@@ -1,0 +1,17 @@
+'<div class="item-caption">[投资项目名称]</div>'
+'<ul class="detail-item-list">'
+	'<li class="detail-item width-50">'
+		'<label for="">年利率:</label>'
+		'<span class="value" type="text" readonly >20.0%</span>'
+	'</li>'
+	'<li class="detail-item width-50">'
+		'<label for="">回购期限:</label>'
+		'<span class="value" type="text" readonly >一个月</span>'
+
+	'</li>'
+	'<li class="detail-item width-100">'
+		'<label for="">流转总额:</label>'
+		'<span class="value" type="text" readonly >￥7000</span>'
+
+	'</li>'
+'</ul> 

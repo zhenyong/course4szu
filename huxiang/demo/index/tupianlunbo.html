@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片轮播  拷贝过去就可以了</title>
+<!--这里可以提取为样式文件-->
+<style type="text/css">
+body{font-size:12px; font-family:Verdana;margin:0;padding:0}
+*{font-size:12px; font-family:Verdana;margin:0;padding:0}
+#play img {border:0px;width:346px;height:191px}
+#play {width:346px;height:191px;overflow:hidden;margin:50px 0 0 50px;}
+#play_info{position:absolute;margin-top:141px;padding:8px 0 0 20px;height:42px;width:270px;color:#fff;z-index:1001;cursor:pointer}
+#play_info b{font-size:14px;display:block}
+#play_bg {position:absolute;background-color:#000;margin-top:141px;height:50px;width:346px;filter: Alpha(Opacity=30);opacity:0.3;z-index:1000}
+#play_text {position:absolute;margin:141px 0 0 200px;height:50px;width:60px;z-index:1002}
+#play_text ul {list-style-type:none; width:80px;height:50px;display:block;padding-top:1px;_padding-top:0px;filter: Alpha(Opacity=80);opacity:0.8;}
+#play_text ul li {width:16px;height:16px;float:left;background-color:#000;display:block;color:#FFF;text-align:center;margin:1px;cursor:pointer;font-family:"Courier New";}
+#play_list a{display:block;width:346px;height:191px;position:absolute;overflow:hidden}
+</style>
+ <!--直接通过英特网家在Jquery的主文件库也可以通过下载本地的主文件库-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+</head>
+ 
+<body>
+<div id="play">
+ <div id="play_bg"></div>
+ <div id="play_info"></div>
+ <div id="play_text">
+  <ul>
+   <li>1</li>
+   <li>2</li>
+   <li>3</li>
+   <li>4</li>
+  </ul>
+ </div>
+ <div id="play_list">
+ <a href="#" target="_blank">
+  <img src="http://img.17k.com/channel/dushi/wq0901.jpg" title="温泉镇的风流事" alt="温泉镇的风流事 " /> </a>
+ <a href="#" target="_blank">
+  <img src="http://img.17k.com/channel/changxiao/small_32577.jpg" title="北京镜鉴记" alt="北京镜鉴记" /> </a>
+ <a href="#" target="_blank">
+  <img src="http://img.17k.com/channel/xuanhuan/small_32663.jpg" title="蜀山飞仙" alt="蜀山飞仙" /></a>
+ <a href="#" target="_blank">
+  <img src="http://img.17k.com/channel/kongbu/small_27507.jpg" title="圣枪传奇" alt="圣枪传奇" /></a>
+ </div>
+</div>
+<!--这段是轮播的主要实现JS可以提取为一个外部Js文件-->
+<script type="text/javascript">
+var t = n = 0, count = $("#play_list a").size();
+$(function(){
+ $("#play_list a:not(:first-child)").hide();
+ $("#play_info").html($("#play_list a:first-child").find("img").attr('alt'));
+ $("#play_text li:first-child").css({"background":"#fff",'color':'#000'});
+ $("#play_info").click(function(){window.open($("#play_list a:first-child").attr('href'), "_blank")});
+ $("#play_text li").click(function() {
+  var i = $(this).text() - 1;
+  n = i;
+  if (i >= count) return;
+  $("#play_info").html($("#play_list a").eq(i).find("img").attr('alt'));
+  $("#play_info").unbind().click(function(){window.open($("#play_list a").eq(i).attr('href'), "_blank")})
+  $("#play_list a").filter(":visible").fadeOut(500).parent().children().eq(i).fadeIn(1000);
+  $(this).css({"background":"#fff",'color':'#000'}).siblings().css({"background":"#000",'color':'#fff'});
+ });
+ t = setInterval("showAuto()", 2000);
+ $("#play").hover(function(){clearInterval(t)}, function(){t = setInterval("showAuto()", 2000);});
+})
+function showAuto()
+{
+ n = n >= (count - 1) ? 0 : ++n;
+ $("#play_text li").eq(n).trigger('click');
+}
+</script>
+ 
+</body>
+</html>

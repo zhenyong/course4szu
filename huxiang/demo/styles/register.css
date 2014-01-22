@@ -1,0 +1,169 @@
+* {
+	font-family: Verdana;
+}
+
+.container{
+	background: transparent url('../images/login_background.png');
+	width:400px;
+	height:687px;
+	margin:0 auto;
+}
+
+a {
+	color: blue;
+	text-decoration: none;
+}
+
+.head{
+    width: 100%;
+    height:60px;
+    text-align: center;
+    line-height: 60px;
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 120%;
+    /*background:red;*/
+}
+
+.menu-return {
+	background: transparent url('../images/return.png') no-repeat;
+}
+
+.pull-left {
+	float: left;
+}
+
+.pull-right {
+	float: right;
+}
+
+.empty-box{
+	width: 70px;
+	height:100%;
+	/*background:blue;*/
+	color: #b7b7b7;
+	text-align: center;
+}
+
+.empty-box>label{
+	padding-left: 15px;
+}
+
+.body{
+	max-width: 400px;
+	height:600px;
+	width: 360px;
+	margin: 0 auto;
+	margin-top: 10px;
+	border: 0;
+	background:#E5E5E5;
+	position: relative;
+}
+
+.title{
+	padding:25px;
+	margin: 0;
+	color: #000;
+	text-align: center;
+	font-size: 150%;
+}
+
+form {
+	width: 100%;
+}
+
+div.input-wrap{
+	 width: 320px;
+	 margin: 0 auto;
+	 height: 51px;
+	 text-align: left;
+	 margin-bottom: 20px;
+	 padding-left: 54px;
+	 box-sizing: border-box;
+}
+
+.input-wrap>input {
+	padding-left: 10px;
+	font-size: 20px;
+	border: none;
+	width: 266px;
+	height: 100%;
+	wrap-height: 100%;
+	box-sizing: border-box;
+}
+
+.email-input-wrap {
+	background: transparent url('../images/register_email.png') no-repeat;
+}
+
+.username-input-wrap {
+	background: transparent url('../images/register_username.png') no-repeat;
+}
+
+.password-input-wrap {
+	background: transparent url('../images/register_password.png') no-repeat;
+}
+
+.recommend-input-wrap {
+	background: transparent url('../images/register_recommend.png') no-repeat;
+}
+
+
+
+.form-bottom{
+	padding: 0 50px;
+}
+
+#remember-psw {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+	vertical-align: middle;
+}
+#remember-psw:focus {
+	border:none;
+}
+#remember-psw:checked:after {
+	color: #85ada7;
+	text-shadow: 0 1px 0 #669991;
+	bottom: 1px;
+	position: relative;
+}
+#remember-psw {
+	text-decoration: none;
+	outline: none;
+}
+#remember-psw:after {
+	content: '✔';
+	font-size: 18px;
+	color: #d9d9d9;
+	background: white;
+	text-shadow: 0 -1px 0 #bfbfbf;
+}
+
+.btns{
+	margin-top: 20px;
+	position: relative;
+	width: 100%;
+	height: 20px;
+}
+.btn{
+  	width: 310px;
+	height: 24px;
+	text-align: center;
+	color: #FFF;
+	padding: 10px;
+	font-size: 120%;
+  }
+
+.register-btn{
+	background: #67b552;
+	right: 15px;
+	top: 0;
+	position: absolute;
+}	
+.register-btn:active{
+	background: #67ac32;
+}

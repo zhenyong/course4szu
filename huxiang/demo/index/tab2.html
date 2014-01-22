@@ -1,0 +1,68 @@
+<html>
+<head>
+	<script type="text/javascript" src="./jquery-1.10.2.js">
+	</script>
+	<script type="text/javascript">
+	$(function(){
+		$('.tiyu').hide();
+		$('.yule').hide();
+	var	$div_li = $('.tab_menu ul li');
+		$div_li.click(function()
+		{
+			_index=$div_li.index(this);
+			console.log(_index);
+		
+			$(this).addClass("selected").siblings().removeClass("selected");
+			
+			if(_index == 0)
+				$('.shishi').show().siblings().hide();
+			if(_index == 1)
+				$('.tiyu').show().siblings().hide();
+			if(_index == 2)
+				$('.yule').show().siblings().hide();
+
+
+	})
+
+
+	});
+	
+	</script>
+
+	<style type="text/css">
+	ul li{
+		float: left;
+		width: 50px;
+		background-color: #6e6e6e;
+		margin: 1px;
+	}
+	.tab_menu{
+		width: 200px;
+		height: 50px; 	
+	}
+
+	</style>
+</head>
+<body>
+	<div class = "tab_menu">
+		<ul >
+			<li class="selected">
+				实时
+			</li>
+			<li> 体育</li>
+			<li>娱乐</li>
+		</ul>
+	</div>
+
+
+
+
+
+
+	<div class="tab_box">
+		<div class="shishi">实时</div>
+		<div class="tiyu">体育</div>
+		<div class="yule">娱乐</div>
+	</div>
+</body>
+</html>

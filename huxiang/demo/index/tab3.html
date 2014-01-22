@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>淡入淡出的TAB选项卡菜单</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style type="text/css">
+ul,li{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#tabfirst li{
+	float:left;
+	background-color:#868686;
+	color:white;
+	padding:5px;
+	margin-right:2px;
+	border:1px solid white;
+}
+#tabfirst li.tabin1{
+	background-color:#6E6E6E;
+	border:1px solid #6E6E6E;
+}
+.contentfirst{
+	clear:left;
+	background-color:#6E6E6E;
+	color:white;
+	width:300px;
+	height:100px;
+	padding:10px;
+	display:none;
+}
+.contentin{
+	display:block;
+}
+</style>
+
+<script type="text/javascript" src="./jquery-1.10.2.js"></script>
+<script type="text/javascript">
+ $(function(){
+ 	var _tab=$('ul#tabfirst>li');
+	var _con=$('div#tab_box>div');
+	var _conthis;
+	var _index=0;	
+	_tab.click(function(){
+		_index=_tab.index(this);
+		$(this).addClass('tabin').siblings().removeClass('tabin');
+		_con.filter(':visible').fadeOut(200,function(){
+			_con.eq(_index).fadeIn(200)
+		});
+		// if($(this).attr('class') == "tabin1")
+		// {
+		// 	$('.contentin contentfirst').show();
+		// 	$('.contentfirst').hide();
+		// }
+		// else if($(this).attr('class') == "tabin2")
+		// 	{
+		// 	$('.contentfirst').show()
+		// 	$('.contentin contentfirst').hide();
+		// 	}
+		if(_index == 0)
+		{
+			console.log('press 1');
+		}
+		if(_index == 1)
+		{
+			console.log('press 2');
+		$('.tabin2').css("border","1px solid #6E6E6E");
+		$('.tabin2').css("background-color","#6E6E6E");
+		}
+
+
+		});
+})
+</script>
+</head>
+<body>
+<ul id="tabfirst">
+	<li class="tabin1">选项卡1</li>
+	<li class="tabin2">选项卡2</li>
+</ul>
+<!-- <div id="tab_box">
+	<div class="contentin contentfirst">选项卡1的内容</div>
+	<div class="contentfirst">选项卡2的内容</div>
+	<!-- <div class="contentfirst">选项卡3的内容</div> -->
+</div> -->
+<br>初次打开，如果左下角出现错误提示，请刷新一下页面就正常了，正常使用时不会出现此现象。
+</body>
+</html>

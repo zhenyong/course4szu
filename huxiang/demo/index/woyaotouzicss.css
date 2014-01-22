@@ -1,0 +1,168 @@
+.head{
+	width: 100%;
+	height: 64px;
+}
+.headtable{
+	width: 100%;
+	height: 100%;
+}
+.headtitle{
+	text-align: center;
+	color: rgb(220,220,220);
+	font-size: 20px;
+}
+.headright{
+	width: 40px;
+	height: 100%;
+	background: url('caidan.png') no-repeat;
+	float: right;
+	border: none;
+}
+.headtable1{
+	width: 50px;
+}
+.woyaotouzi2{
+	width: 95%;
+	margin-left: 10px;
+}
+.touzilist{
+	background-color: rgb(229,229,229);
+	width: 95%;	
+	margin-left:10px;
+	margin-top: -23px; 
+}
+.tabelclass{
+	width: 350px;
+}
+.bodytabletitle{
+	line-height: 200%;
+	background: url('money.png') no-repeat;
+	float: left;
+	padding-left: 40px;
+	color: rgb(107,107,107);
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+.bodytablesecondrow{
+	width: 50%;
+}
+.woyaotouziwoyaojiekuan{
+	border: -5px;
+	width: 100%;
+	text-align: center;
+	line-height: 200%;
+	height: 36px;
+	padding-top: 5px;
+	padding-right: -10px;
+
+}
+.bodytableinnertitlelabel{
+	color: rgb(182,182,182);
+	font-size: 13px;
+}
+.bodytableinnerdetaillabel{
+	color: rgb(171,69,69);
+	font-size: 13px;
+}
+.appenddiv{
+	position: absolute;
+	z-index: 2;
+}
+.imgg{
+	width: 95%;
+}
+.bodydiv{
+	width: 350px;
+	height: 567px;
+	text-align: center;
+	margin: 0 auto;
+	background-color: rgb(65,65,65);
+}
+.tabdiv{
+	height: 35px;
+}
+.bodyul{
+	list-style:none;
+	margin-left: -40px;
+}
+.tablemuney{
+	background:url('money.png');
+	float: left;
+	text-align: center;
+	display: inline-block;
+}
+.headbg{
+	width: 15%;
+}
+.woyaotouzi{
+	margin-top: -8px;
+}
+.woyaotouzi1{
+	background-color: rgb(229,229,229);
+	font-weight: 600;
+	color: rgb(137,137,137);
+}
+.woyaojiekuan1{
+	background-color: rgb(169,169,169);
+	font-weight: 600;
+	color: rgb(229,229,229);
+	padding-bottom: 10px;
+}
+.blackten{
+	width: 350px;
+	height: 570px;
+	background-color: #000;
+	position: absolute;
+	opacity: 0.5;
+	z-index: 1;
+}
+#tabfirst{
+	height: 100%;
+}
+#tabfirst li{
+	float:left;
+	background-color:#868686;
+	color:white;
+	padding:4px;
+	border:1px solid white;
+	width: 152px;
+	padding-bottom: 11px;
+	margin-bottom: 5px;
+}
+#tabfirst li.tabin1{
+	background-color:#6E6E6E;
+	border:1px solid #6E6E6E;
+	margin-left: -40px;
+}
+#tabfirst li.tabin2{
+	background-color:#6E6E6E;
+	border:1px solid #6E6E6E;
+	padding-right: 12px;
+}
+
+.contentfirst{
+	clear:left;
+	background-color:#6E6E6E;
+	color:white;
+	width:300px;
+	height:100px;
+	padding:10px;
+	display:none;
+}
+.contentin{
+	display:block;
+}
+.body2{
+	background: url("body2bg.png");
+	width: 350px;
+	height: 365px;
+}
+.tabdiv ul li{
+
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+html ul li table label{
+	font-weight: 600;
+} 
