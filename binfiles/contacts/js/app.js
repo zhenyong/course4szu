@@ -10,19 +10,11 @@ var db = {'1':{id:'1',name:'趙三', phone:'10086', age: 22},
 //persist layer
 var dao = {
 	list: function (callback) {
-		// var ret = [];
-		// $.each(db, function (index, value) {
-		// 	ret.push(value);
-		// });
-		// return ret;
 		$.ajax({
 			url: 'data/list.json',
 			success: function (data) {
 				callback(data);
 			},
-			complete: function  () {
-				// alert(1);
-			}
 		});
 
 
@@ -55,9 +47,7 @@ var dao = {
 	},
 
 	delete: function(data, callback){
-		// db[data.id] = null;
 		delete db[data.id];
-
 		log('server contact dao delete success', data);
 		var lastData = data;
 		setTimeout(function () {
@@ -67,165 +57,6 @@ var dao = {
 }
 //the server side end
 
-var indicate = {
-	show: function (msg) {
-		var el = $('#indicator');
-		el.text(msg).show();
-		return el;
-	},
-	hide: function () {
-		$('#indicator').hide();
-	}
-}
-
-
-function generateTpl () {
-	return Array.prototype.slice.call(arguments, 0).join('');
-}
-
-function log () {
-	console.log.apply(console, arguments);
-}
-/*
-主函数
-直接调用init方法
-*/
-function Application() {
-	this.init();
-}
-
-Application.prototype = {
-	init: function () {
-		log('>>>app init');
-		var me = this;
-		//初始化model。
-		this.contactsModel = new ContactsModel();
-		//初始化view。
-		this.view = new ContactsView();
-		//初始化controler
-		this.controller = new ContactsController(this.view, this.contactsModel);
-
-			$('#insert-btn').on('click',function(event){
-				event.preventDefault();
-				event.stopPropagation();
-				var str= '插入新联系人';
-				me.view.fire('insert.click',[str]);
-			});
-			$('#search-btn').on('click',function(event){
-				event.preventDefault();
-				event.stopPropagation();
-				var str= '查找联系人';
-				me.view.fire('search.click',[str]);
-			});
-		
-	},
-
-	startup: function () {
-		this.controller.showContacts();
-	}
-};
-
-//@controller
-//controller有两个实例变量view和mode，分别连接view模块和model模块
-//还应绑定'insert.click',insert-submit事件（待实现）
-function ContactsController (view, mode) {
-	//
-	this.view = view;
-	this.model = mode;
-
-	// this.view.bind('edit', bind(this.onViewEdit, this));
-	this.view.bind('edit.click', this.onViewEdit, this);
-	this.view.bind('edit.submit', this.onViewSubmit, this);
-	//对delete按钮绑定事件
-	this.view.bind('delete.click', this.onViewDeleteClick, this);
-	this.view.bind('delete.submit',this.onViewDeleteSubmit,this);
-	
-	//针对insert-click,和insert-submit事件进行绑定
-	this.view.bind('insert.click', this.onViewInsertClick, this);
-	this.view.bind('insert.submit', this.onViewInsertSubmit, this);
-	//对search按钮进行事件绑定
-	this.view.bind('search.click', this.onviewSearchClick, this);
-	this.view.bind('search.submit', this.onviewSearchSubmit, this);
-}
-
-//当事件被触发时，相应的处理方法被调用
-ContactsController.prototype = {
-	onviewSearchClick : function(){
-		var me = this;
-		this.view.showSearchForm();
-	},
-	onviewSearchSubmit : function(name, callback){
-		var me = this;
-		log(">>>onviewSearchSubmit");
-
-		this.model.search(name, function(success, datalist){
-			log("onviewSearchSubmit model search" + datalist);
-
-			callback(success, datalist);
-		});
-	},
-
-	onViewInsertClick : function(msg){
-		var me =this;
-		log('>>> controller onViewInsertClick');
-		alert(msg);
-		this.view.showInsertForm();
-	},
-	onViewInsertSubmit :  function (data, callback) {
-		var me =this;
-		log('>>> controller on view Submit');
-			
-		//udpate
-		
-		this.model.insert(data, function (success, lastData) {
-			callback(success, lastData);
-		});
-
-},
-
-	onViewEdit : function (id) {
-		log('>>> controller on view edit');
-		
-		var contactData = this.model.fetch(id)
-		
-		this.view.showEditForm(contactData)
-
-	},	
-	onViewSubmit : function (data, callback) {
-		var me =this;
-		log('>>> controller on view Submit');
-			
-		//udpate
-		this.model.update(data, function (success, lastData) {
-			callback(success, lastData);
-		});
-		log('<<< controller');
-	},
-	onViewDeleteClick: function (id) {
-		var me =this;
-		log('>>> controller onViewDelete');
-		var contactData = this.model.fetch(id)
-		
-		this.view.showDeleteForm(contactData)
-	},
-	onViewDeleteSubmit :function(data, callback){
-
-		//udpate
-		this.model.delete(data, function (success, lastData) {
-			callback(success, lastData);
-		});
-		log('<<< controller');
-
-	},
-	showContacts: function () {
-		var me = this;
-		//get contacts data
-		var dataList = this.model.fetch('all', function (dataList) {
-			log('>>>controller showContacts');
-			me.view.listContacts(dataList);
-		});
-	}
-}
 function formatContactSearchFormTpl(){
 	return generateTpl(
 		'<form>',
@@ -353,14 +184,173 @@ function searchFormatContactItemTpl(data){
 		'</li>'
 	);
 }
-//view模块继承观察着类，拥有观察着类的fire(),bind()方法，并拥有自己的showeditform,listcontacts(),updatesuccess(),updatefailed方法。
-//还应拥有showInsertForm方法，（待实现）
-ContactsView = Class.extend(Observable, {
-	showSearchForm : function(){
-		var me = this;
-		var tpl = formatContactSearchFormTpl();
 
-		var $form = $(tpl).css({
+
+var indicate = {
+	show: function (msg) {
+		var el = $('#indicator');
+		el.text(msg).show();
+		return el;
+	},
+	hide: function () {
+		$('#indicator').hide();
+	}
+}
+
+function generateTpl () {
+	return Array.prototype.slice.call(arguments, 0).join('');
+}
+
+function log () {
+	console.log.apply(console, arguments);
+}
+
+
+
+
+/*
+主函数
+直接调用init方法
+*/
+function Application() {
+	this.init();
+}
+
+Application.prototype = {
+	init: function () {
+		log('>>>app init');
+		var me = this;
+		//初始化model。
+		this.contactsModel = new ContactsModel();
+		//初始化view。
+		this.view = new ContactsView();
+		//初始化controler
+		this.controller = new ContactsController(this.view, this.contactsModel);
+
+		$('#insert-btn').on('click',function(event){
+			event.preventDefault();
+			event.stopPropagation();
+			var str= '插入新联系人';
+			me.view.fire('insert.click',[str]);
+		});
+		$('#search-btn').on('click',function(event){
+			event.preventDefault();
+			event.stopPropagation();
+			var str= '查找联系人';
+			me.view.fire('search.click',[str]);
+		});
+		
+	},
+
+	startup: function () {
+		this.controller.showContacts();
+	}
+};
+
+//@controller
+//controller有两个实例变量view和mode，分别连接view模块和model模块
+//绑定各事件
+function ContactsController (view, mode) {
+	//
+	this.view = view;
+	this.model = mode;
+
+	// this.view.bind('edit', bind(this.onViewEdit, this));
+	this.view.bind('edit.click', this.onViewEdit, this);
+	this.view.bind('edit.submit', this.onViewSubmit, this);
+
+	//对delete按钮绑定事件
+	this.view.bind('delete.click', this.onViewDeleteClick, this);
+	this.view.bind('delete.submit',this.onViewDeleteSubmit,this);
+	
+	//针对insert-click,和insert-submit事件进行绑定
+	this.view.bind('insert.click', this.onViewInsertClick, this);
+	this.view.bind('insert.submit', this.onViewInsertSubmit, this);
+
+	//对search按钮进行事件绑定
+	this.view.bind('search.click', this.onviewSearchClick, this);
+	this.view.bind('search.submit', this.onviewSearchSubmit, this);
+}
+
+//当事件被触发时，相应的处理方法被调用
+ContactsController.prototype = {
+	onviewSearchClick : function(){
+		var me = this;
+		this.view.showSearchForm();
+	},
+	onviewSearchSubmit : function(name, callback){
+		var me = this;
+		log(">>>onviewSearchSubmit");
+
+		this.model.search(name, function(success, datalist){
+			log("onviewSearchSubmit model search" + datalist);
+
+			callback(success, datalist);
+		});
+	},
+
+	onViewInsertClick : function(msg){
+		var me =this;
+		log('>>> controller onViewInsertClick');
+
+		alert(msg);
+		this.view.showInsertForm();
+	},
+	onViewInsertSubmit :  function (data, callback) {
+		var me =this;
+		log('>>> controller on view Submit');
+		//udpate
+		this.model.insert(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+	},
+
+	onViewEdit : function (id) {
+		log('>>> controller on view edit');
+		
+		var contactData = this.model.fetch(id)
+		
+		this.view.showEditForm(contactData)
+
+	},	
+	onViewSubmit : function (data, callback) {
+		var me =this;
+		log('>>> controller on view Submit');
+			
+		//udpate
+		this.model.update(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+		log('<<< controller');
+	},
+	onViewDeleteClick : function (id) {
+		var me =this;
+		log('>>> controller onViewDelete');
+
+		var contactData = this.model.fetch(id)
+		
+		this.view.showDeleteForm(contactData)
+	},
+	onViewDeleteSubmit : function(data, callback){
+		//udpate
+		this.model.delete(data, function (success, lastData) {
+			callback(success, lastData);
+		});
+		log('<<< controller');
+	},
+	showContacts : function () {
+		var me = this;
+		//get contacts data
+		var dataList = this.model.fetch('all', function (dataList) {
+			log('>>>controller showContacts');
+			me.view.listContacts(dataList);
+		});
+	}
+}
+
+function formatForm(form){
+
+		var $form = $(form).css({
 			position: 'absolute',
 			border: '1px solid'
 		}).appendTo($('#container'));
@@ -368,15 +358,22 @@ ContactsView = Class.extend(Observable, {
 		$form.css({
 			left: ($(window).width() - $form.width()) / 2
 		});
-		log(tpl);
+	return $form;
+}
+//view模块继承观察着类，拥有观察着类的fire(),bind()方法，并拥有自己的showeditform,listcontacts(),updatesuccess(),updatefailed方法。
+//实现show**Form方法
+ContactsView = Class.extend(Observable, {
+	showSearchForm : function(){
+		var me = this;
+		var tpl = formatContactSearchFormTpl();
+
+		var $form = formatForm(tpl);
+
 		$form.on('submit', function (event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			// data.id = $(this).find('input[name="id"]').val();
 			var search_name = $(this).find('input[name="name"]').val();
-			// data.phone = $(this).find('input[name="phone"]').val();
-			// data.age = $(this).find('input[name="age"]').val();
 			log(">>>showDeleteForm")
 			log(search_name);
 
@@ -388,15 +385,8 @@ ContactsView = Class.extend(Observable, {
 				var stpl = "",$items;
 				$.each(datalist,function(index, value){
 					tpl = searchFormatContactItemTpl(value);
-
-					var $form = $(tpl).css({
-					position: 'absolute',
-					border: '1px solid'
-				}).appendTo($('#container'));
-
-				$form.css({
-					left: ($(window).width() - $form.width()) / 2
-				});
+					
+					var $form = formatForm(tpl);
 
 				$hide_btn = $form.find('input[class="hide"]');
 				$find_me = $form.find('li');
@@ -414,19 +404,11 @@ ContactsView = Class.extend(Observable, {
 		});
 	},
 	showDeleteForm : function(data){
-		alert("deleting。。。");
-
 		var me = this;
 		var tpl = formatContactDeleteFormTpl(data);
 
-		var $form = $(tpl).css({
-			position: 'absolute',
-			border: '1px solid'
-		}).appendTo($('#container'));
+		var $form = formatForm(tpl);
 
-		$form.css({
-			left: ($(window).width() - $form.width()) / 2
-		});
 		$form.on('submit', function (event) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -448,18 +430,12 @@ ContactsView = Class.extend(Observable, {
 		});
 	},
 	showInsertForm : function(){
-		var data = {};
 		var me = this;
 		var tpl = formatContactInsertFormTpl();
+		var data = {};
 
-		var $form = $(tpl).css({
-			position: 'absolute',
-			border: '1px solid'
-		}).appendTo($('#container'));
+		var $form = formatForm(tpl);
 
-		$form.css({
-			left: ($(window).width() - $form.width()) / 2
-		});
 		$form.on('submit', function (event) {
 
 			event.preventDefault();
@@ -503,23 +479,14 @@ ContactsView = Class.extend(Observable, {
 		var me = this;
 		var tpl = formatContactEditFormTpl(data);
 
-		var $form = $(tpl).css({
-			position: 'absolute',
-			border: '1px solid'
-		}).appendTo($('#container'));
+		var $form = formatForm(tpl);
 
-		$form.css({
-			left: ($(window).width() - $form.width()) / 2
-		});
 		//end
 		//点击OK按钮触发动作
 		$form.on('submit', function (event) {
 			event.preventDefault();
 			event.stopPropagation();
-
-			//my code
-			// me.fire('edit.submit', util.getFormVules($form))
-			//hack
+			
 			alert(data);
 			// data.id = $(this).find('input[name="id"]').val();
 			data.name = $(this).find('input[name="name"]').val();
@@ -548,8 +515,7 @@ ContactsView = Class.extend(Observable, {
 					log('view fire edit event');
 					me.fire('delete.click', [lastData.id]);
 					});
-
-			}]);
+				}]);
 
 			indicate.show('saving');
 
@@ -571,8 +537,10 @@ ContactsView = Class.extend(Observable, {
 			$item = $(tpl);
 			$item.appendTo(ul);
 			log($item);
+
 			$edit_btn = $item.find('input[class="edit"]');
 			$delete_btn = $item.find('input[class="delete"]');
+
 			$edit_btn.click(function () {
 				log('view fire edit event');
 				me.fire('edit.click', [value.id]);
@@ -581,14 +549,16 @@ ContactsView = Class.extend(Observable, {
 				log('view fire edit event');
 				me.fire('delete.click', [value.id]);
 			});
-			// $('$item .delete').click(function () {
-			// 	log('view fire delete event');
-			// 	me.fire('delete.click', [value.id]);
-			// });
-			
 		});
 	},
 
+	onDeleteFail: function () {
+	},
+
+	onDeleteSuccess: function (data) {
+
+		indicate.show('delete ' + data.id + ' success').fadeOut();
+	},
 	onUpdateFail: function () {
 	},
 
