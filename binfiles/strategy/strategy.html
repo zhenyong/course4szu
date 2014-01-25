@@ -1,21 +1,29 @@
 <html>
 <head>
+	<script type="text/javascript" src="./underscore.js"></script>
 	<script type="text/javascript">
 //####
 //second time
+function errorUtilMaker(key, checker){
+	var ret="";
+	ret =  "invalid value for *"+ key +"*,"+checker;
+	return ret;
+}
 	var validator = {
 		types:{},
 		messages: [],
 		config: {},
-
+		
+		
 		validate: function(data) {
-			var i, msg, type, checker, result_ok;
+			var i, index, msg, type, checker, resultOk, cheInstructions;
 
 			this.messages = [];
-
-			for (i in data) {
-				if(data.hasOwnProperty(i)){
-					type = this.config[i];
+			//each()方法这样不行啊！
+			// _.each(data,function(index,value){
+				for(index in data){
+					if(data.hasOwnProperty(index)){
+					type = this.config[index];
 					checker = this.types[type];
 
 					if(!type) {
@@ -27,20 +35,23 @@
 							messages : "no handler to validate type :"+type
 						};
 					}
-					result_ok = checker.validate(data[i]);
-					if(!result_ok) {
-						msg = "invalid value for *"+ i +"*,"+checker.instructions;
+					resultOk = checker.validate(data[index]);
+					if(!resultOk) {
+						cheInstructions = checker.instructions;
+						msg = errorUtilMaker(index, cheInstructions);
 						this.messages.push(msg);
 					}
-
 				}
 			}
 			return this.hasErrors();
 			},
-			hasErrors : function() {
+		hasErrors : function() {
 				return this .messages.length !== 0;
+			},
+		addType : function(name, object){
+			validator.types[name] = object;
 			}
-	}
+		}
 	//vertify the value is empty or not;
 	validator.types.isNonEmpty = {
 		validate : function (value) {
@@ -63,6 +74,22 @@
 		instructions :"the value is Alphanumber only ,not contain any spectial charector;"
 	}
 
+
+	validator.config = {
+		first_name : 'isNonEmpty',
+		age : 'isNumber',
+		username : 'isAlphaNum',
+		gender : 'isAlphaNum',
+	};
+
+	validator.addType.call(this,'isNonEmpty2', {
+			validate : function (value) {
+			return value !== "";
+			},
+			instructions : "no empty allowed."
+			}
+		)
+
 	var data = {
 		first_name : "tom",
 		last_name : "xu",
@@ -71,17 +98,11 @@
 		gender : "male",
 
 	};
-	validator.config = {
-		first_name : 'isNonEmpty',
-		age : 'isNumber',
-		username : 'isAlphaNum',
-		gender : 'isAlphaNum',
-	};
-
 	validator.validate(data);
 
 	if (validator.hasErrors()) {
 	    console.log(validator.messages.join("\n"));
+	    console.log(validator.types);
 	}
 	</script>
 </head>
